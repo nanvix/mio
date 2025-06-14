@@ -15,7 +15,7 @@ pub(crate) use self::waker::Waker;
 cfg_net! {
     pub(crate) mod tcp;
     pub(crate) mod udp;
-    #[cfg(unix)]
+    #[cfg(all(unix, not(target_os = "nanvix")))]
     pub(crate) mod uds;
 }
 
@@ -30,7 +30,7 @@ cfg_io_source! {
     #[cfg(windows)]
     use std::os::windows::io::RawSocket;
 
-    #[cfg(any(windows, unix, target_os = "hermit"))]
+    #[cfg(any(windows, unix, target_os = "hermit", target_os = "nanvix"))]
     use crate::{Registry, Token, Interest};
 
     pub(crate) struct IoSourceState;
@@ -50,7 +50,7 @@ cfg_io_source! {
         }
     }
 
-    #[cfg(any(unix, target_os = "hermit"))]
+    #[cfg(any(unix, target_os = "hermit", target_os = "nanvix"))]
     impl IoSourceState {
         pub fn register(
             &mut self,

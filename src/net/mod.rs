@@ -33,7 +33,7 @@ mod udp;
 #[cfg(not(target_os = "wasi"))]
 pub use self::udp::UdpSocket;
 
-#[cfg(unix)]
+#[cfg(all(unix, not(target_os = "nanvix")))]
 mod uds;
-#[cfg(unix)]
+#[cfg(all(unix, not(target_os = "nanvix")))]
 pub use self::uds::{UnixDatagram, UnixListener, UnixStream};

@@ -14,6 +14,7 @@
 //! * `Waker`: see [`crate::Waker`].
 
 cfg_os_poll! {
+    #[cfg(not(target_os = "nanvix"))]
     macro_rules! debug_detail {
         (
             $type: ident ($event_type: ty), $test: path,
@@ -50,7 +51,7 @@ cfg_os_poll! {
     }
 }
 
-#[cfg(any(unix, target_os = "hermit"))]
+#[cfg(any(all(unix, not(target_os = "nanvix")), target_os = "hermit"))]
 cfg_os_poll! {
     mod unix;
     #[allow(unused_imports)]
@@ -69,14 +70,28 @@ cfg_os_poll! {
     pub(crate) use self::wasi::*;
 }
 
+#[cfg(target_os = "nanvix")]
+cfg_os_poll! {
+    mod nanvix;
+    #[allow(unused_imports)]
+    pub use self::nanvix::*;
+}
+
 cfg_not_os_poll! {
     mod shell;
     pub(crate) use self::shell::*;
 
-    #[cfg(unix)]
+    #[cfg(all(unix, not(target_os = "nanvix")))]
     cfg_any_os_ext! {
         mod unix;
         #[cfg(feature = "os-ext")]
         pub use self::unix::SourceFd;
+    }
+
+    #[cfg(target_os = "nanvix")]
+    cfg_any_os_ext! {
+        mod nanvix;
+        #[cfg(feature = "os-ext")]
+        pub use self::nanvix::SourceFd;
     }
 }
