@@ -1,4 +1,6 @@
 use std::io;
+#[cfg(target_os = "nanvix")]
+use std::os::fd::RawFd;
 #[cfg(unix)]
 use std::os::fd::{AsRawFd, RawFd};
 use std::time::Duration;
@@ -20,7 +22,7 @@ impl Selector {
     }
 }
 
-#[cfg(unix)]
+#[cfg(any(unix, target_os = "nanvix"))]
 cfg_any_os_ext! {
     use crate::{Interest, Token};
 

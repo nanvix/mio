@@ -3,6 +3,8 @@ use std::ops::{Deref, DerefMut};
 use std::os::fd::AsRawFd;
 // TODO: once <https://github.com/rust-lang/rust/issues/126198> is fixed this
 // can use `std::os::fd` and be merged with the above.
+#[cfg(target_os = "nanvix")]
+use std::os::fd::AsRawFd;
 #[cfg(target_os = "hermit")]
 use std::os::hermit::io::AsRawFd;
 #[cfg(windows)]
@@ -104,7 +106,7 @@ impl<T> DerefMut for IoSource<T> {
     }
 }
 
-#[cfg(any(unix, target_os = "hermit"))]
+#[cfg(any(unix, target_os = "hermit", target_os = "nanvix"))]
 impl<T> event::Source for IoSource<T>
 where
     T: AsRawFd,

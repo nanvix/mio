@@ -5,6 +5,7 @@
     unused_imports,
     dead_code
 )]
+#![cfg_attr(target_os = "nanvix", feature(rustc_private))]
 #![cfg_attr(docsrs, feature(doc_cfg))]
 // Disallow warnings when running tests.
 #![cfg_attr(test, deny(warnings))]
@@ -92,6 +93,22 @@ pub mod unix {
 #[cfg_attr(docsrs, doc(cfg(all(target_os = "hermit", feature = "os-ext"))))]
 pub mod hermit {
     //! Hermit only extensions.
+
+    pub use crate::sys::SourceFd;
+}
+
+#[cfg(all(target_os = "nanvix", feature = "os-ext"))]
+#[cfg_attr(docsrs, doc(cfg(all(target_os = "nanvix", feature = "os-ext"))))]
+pub mod nanvix {
+    //! Nanvix only extensions.
+
+    pub mod pipe {
+        //! Unix pipe.
+        //!
+        //! See the [`new`] function for documentation.
+
+        pub use crate::sys::pipe::{new, Receiver, Sender};
+    }
 
     pub use crate::sys::SourceFd;
 }

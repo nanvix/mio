@@ -27,10 +27,12 @@ cfg_io_source! {
     // can use `std::os::fd` and be merged with the above.
     #[cfg(target_os = "hermit")]
     use std::os::hermit::io::RawFd;
+    #[cfg(target_os = "nanvix")]
+    use std::os::nanvix::io::RawFd;
     #[cfg(windows)]
     use std::os::windows::io::RawSocket;
 
-    #[cfg(any(windows, unix, target_os = "hermit"))]
+    #[cfg(any(windows, unix, target_os = "hermit", target_os = "nanvix"))]
     use crate::{Registry, Token, Interest};
 
     pub(crate) struct IoSourceState;
@@ -50,7 +52,7 @@ cfg_io_source! {
         }
     }
 
-    #[cfg(any(unix, target_os = "hermit"))]
+    #[cfg(any(unix, target_os = "hermit", target_os = "nanvix"))]
     impl IoSourceState {
         pub fn register(
             &mut self,
