@@ -130,6 +130,7 @@ pub(crate) fn socket_addr(addr: &SocketAddr) -> (SocketAddrCRepr, libc::socklen_
                     target_os = "vita",
                     target_os = "hermit",
                     target_os = "nto",
+                    target_os = "nanvix",
                 ))]
                 sin_len: 0,
                 #[cfg(target_os = "vita")]
@@ -166,6 +167,7 @@ pub(crate) fn socket_addr(addr: &SocketAddr) -> (SocketAddrCRepr, libc::socklen_
                     target_os = "vita",
                     target_os = "nto",
                     target_os = "hermit",
+                    target_os = "nanvix",
                 ))]
                 sin6_len: 0,
                 #[cfg(target_os = "vita")]

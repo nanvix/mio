@@ -38,6 +38,7 @@ pub(crate) fn new_raw() -> io::Result<[RawFd; 2]> {
         target_os = "watchos",
         target_os = "espidf",
         target_os = "nto",
+        target_os = "nanvix",
     ))]
     unsafe {
         // For platforms that don't have `pipe2(2)` we need to manually set the
@@ -585,7 +586,7 @@ impl From<OwnedFd> for Receiver {
     }
 }
 
-#[cfg(not(any(target_os = "aix", target_os = "illumos", target_os = "solaris", target_os = "vita")))]
+#[cfg(not(any(target_os = "aix", target_os = "illumos", target_os = "solaris", target_os = "vita", target_os = "nanvix")))]
 fn set_nonblocking(fd: RawFd, nonblocking: bool) -> io::Result<()> {
     let value = nonblocking as libc::c_int;
     if unsafe { libc::ioctl(fd, libc::FIONBIO, &value) } == -1 {
@@ -595,7 +596,7 @@ fn set_nonblocking(fd: RawFd, nonblocking: bool) -> io::Result<()> {
     }
 }
 
-#[cfg(any(target_os = "aix", target_os = "illumos", target_os = "solaris", target_os = "vita"))]
+#[cfg(any(target_os = "aix", target_os = "illumos", target_os = "solaris", target_os = "vita", target_os = "nanvix"))]
 fn set_nonblocking(fd: RawFd, nonblocking: bool) -> io::Result<()> {
     let flags = unsafe { libc::fcntl(fd, libc::F_GETFL) };
     if flags < 0 {

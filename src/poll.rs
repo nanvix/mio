@@ -10,7 +10,8 @@
         target_os = "hurd",
         target_os = "nto",
         target_os = "solaris",
-        target_os = "vita"
+        target_os = "vita",
+        target_os = "nanvix",
     )),
 ))]
 use std::os::fd::{AsRawFd, RawFd};
@@ -449,7 +450,8 @@ impl Poll {
         target_os = "hurd",
         target_os = "nto",
         target_os = "solaris",
-        target_os = "vita"
+        target_os = "vita",
+        target_os = "nanvix",
     )),
 ))]
 impl AsRawFd for Poll {
@@ -750,7 +752,8 @@ impl fmt::Debug for Registry {
         target_os = "hurd",
         target_os = "nto",
         target_os = "solaris",
-        target_os = "vita"
+        target_os = "vita",
+        target_os = "nanvix",
     )),
 ))]
 impl AsRawFd for Registry {
